@@ -25,9 +25,15 @@
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
-
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_GB.UTF-8";
+    supportedLocales = [ "en_GB.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+    extraLocaleSettings = {
+      LC_TIME = "nl_NL.UTF-8";
+      LC_NUMERIC = "en_US.UTF-8";
+     };
+  };
   console.keyMap = "us-acentos";
 
   # Enable SDDM.
@@ -55,14 +61,10 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
-  # Enable the fish shell.
-  programs.fish.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lucas = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    shell = pkgs.fish;
   };
   
   # Package options

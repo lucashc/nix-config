@@ -1,3 +1,4 @@
+# Home configuration
 { config, pkgs, ... }:
 let
   basicPythonEnv = with pkgs; python3.withPackages (ps: with ps; [
@@ -46,7 +47,8 @@ in
     # Gaming
     steam
   ];
-  
+
+
   programs.vscode.enable = true;
   programs.git = {
     enable = true;
