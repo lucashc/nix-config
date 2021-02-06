@@ -22,7 +22,7 @@ in
   nixpkgs.config.allowUnfree = true;
 
   # User packages
-  home.packages = with pkgs; [
+  home.packages = (with pkgs; [
     # Python
     basicPythonEnv
     # Basic utilities
@@ -32,6 +32,8 @@ in
     # Office
     libreoffice
     zoom-us
+    teams
+    texstudio
     # Media players
     mpv
     vlc
@@ -41,12 +43,34 @@ in
     krita
     inkscape
     gimp-with-plugins
+    ipe
     # Media
     discord
     signal-desktop
     # Gaming
     steam
-  ];
+  ])
+  # KDE Applications
+  ++ (with pkgs.kdeApplications; with pkgs; [
+    digikam
+    krita
+    okular
+    ark
+    filelight
+    kate
+    kcalc
+  ]);
+
+  programs.texlive = {
+    enable = true;
+    extraPackages = tpkgs: {
+      inherit (tpkgs)
+        scheme-medium
+	collection-fontsrecommended
+	algorithms;
+    };
+  };
+
 
 
   programs.vscode.enable = true;
