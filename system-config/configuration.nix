@@ -76,6 +76,16 @@
     firefox
   ];
 
+  # Fonts
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-emoji
+    liberation_ttf
+    ubuntu_font_family
+    dejavu_fonts
+    source-code-pro
+  ];
+
   # Enable the firewall by default.
   networking.firewall.enable = true;
 
