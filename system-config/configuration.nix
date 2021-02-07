@@ -1,7 +1,15 @@
 # System configuration
 
 { config, pkgs, ... }:
-
+let
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec -a "$0" "$@"
+  '';
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -59,6 +67,14 @@
 
   # Enable nvidia drivers.
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    prime = {
+      offload.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+    powerManagement.enable = true;
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -84,6 +100,7 @@
   environment.systemPackages = with pkgs; [
     wget vim
     firefox
+    nvidia-offload
   ];
 
   # Fonts
