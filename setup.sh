@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Linking home-manager config..."
-ln -s ~/dotfiles/home-config/* ~/.config/nixpkgs/
+ln -s ~/nix-config/home-config/* ~/.config/nixpkgs/
 
 echo "About to copy global config"
 read -r -p "Continue? (type y to continue) " continue
