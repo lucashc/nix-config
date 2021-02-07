@@ -13,8 +13,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.resumeDevice = "/dev/mapper/enc";
 
+  # Cleanup tmp at boot.
+  boot.cleanTmpDir = true;
+
   # Enable all firmware.
   hardware.enableAllFirmware = true;
+
+  # Enable bluetooth.
+  hardware.bluetooth.enable = true;
   
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -56,7 +62,8 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # Enable full package for bluetooth support.
+  hardware.pulseaudio.package = pkgs.pulseaudioFull; 
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
@@ -88,6 +95,10 @@
 
   # Enable the firewall by default.
   networking.firewall.enable = true;
+
+  # Battery management.
+  services.tlp.enable = true;
+  
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
