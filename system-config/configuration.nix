@@ -57,6 +57,9 @@
   services.xserver.layout = "us";
   services.xserver.xkbVariant = "intl";
 
+  # Enable nvidia drivers.
+  services.xserver.videoDrivers = [ "nvidia" ];
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -98,7 +101,7 @@
 
   # Battery management.
   services.tlp.enable = true;
-  
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
