@@ -20,6 +20,9 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.resumeDevice = "/dev/mapper/enc";
+  boot.kernelParams = [
+    "resume_offset=1840384" # Calculate on new install
+  ];
 
   # Cleanup tmp at boot.
   boot.cleanTmpDir = true;
