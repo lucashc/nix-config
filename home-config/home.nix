@@ -10,6 +10,8 @@ let
     tqdm
     pillow
     imageio
+    ipython
+    jupyter
   ]);
 in
 {
@@ -66,8 +68,8 @@ in
     extraPackages = tpkgs: {
       inherit (tpkgs)
         scheme-medium
-	collection-fontsrecommended
-	algorithms;
+	      collection-fontsrecommended
+	      algorithms;
     };
   };
 
