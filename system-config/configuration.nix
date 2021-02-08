@@ -29,6 +29,12 @@ in
 
   # Enable bluetooth.
   hardware.bluetooth.enable = true;
+
+  # Enable Pulseaudio.
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull; 
+  };
   
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -78,11 +84,6 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable sound.
-  sound.enable = true;
-  # Enable full package for bluetooth support.
-  hardware.pulseaudio.package = pkgs.pulseaudioFull; 
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
