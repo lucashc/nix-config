@@ -33,7 +33,7 @@
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/A4F7-81C6"; 
       fsType = "vfat";
-      options = [ "discard=async" ];
+      options = [ "discard" ];
     };
 
   swapDevices = [
