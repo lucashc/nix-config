@@ -119,9 +119,21 @@ in
 
   # Default system packages.
   environment.systemPackages = with pkgs; [
-    wget vim
-    firefox
+    vim
+    nano
     nvidia-offload
+    # Basic utilitities
+    bzip2
+    coreutils
+    findutils
+    gawk
+    gzip
+    utillinux
+    htop
+    killall
+    xz
+    wget
+    curl
   ];
 
   # Fonts
