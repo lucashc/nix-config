@@ -2,6 +2,7 @@
 
 { config, pkgs, ... }:
 let
+  # Custom script for running on the nVidia-GPU.
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -9,6 +10,10 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
+  # Load the unstable repository.
+  unstable = import <unstable> {
+    config.allowUnfree = true;
+  };
 in
 {
   imports =
@@ -31,7 +36,13 @@ in
   hardware.enableAllFirmware = true;
 
   # Enable bluetooth.
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    package = pkgs.bluezFull;
+  };
+
+  # Enable microcode updates.
+  hardware.cpu.intel.updateMicrocode = true;
 
   # Enable Pulseaudio.
   hardware.pulseaudio = {
@@ -39,8 +50,8 @@ in
     package = pkgs.pulseaudioFull; 
   };
   
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Use latest unstable kernel.
+  boot.kernelPackages = unstable.linuxPackages_latest;
   
   # Set networking.
   networking.hostName = "Horizon"; # Define your hostname.
@@ -75,7 +86,8 @@ in
   services.xserver.xkbVariant = "intl";
 
   # Enable nvidia drivers.
-  services.xserver.videoDrivers = [ "nvidia" ];
+  # Use the latest versions.
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
   hardware.nvidia = {
     prime = {
       offload.enable = true;
@@ -83,6 +95,11 @@ in
       nvidiaBusId = "PCI:1:0:0";
     };
     powerManagement.enable = true;
+  };
+
+  hardware.opengl = {
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   # Enable CUPS to print documents.
@@ -122,6 +139,17 @@ in
 
   # Battery management.
   services.tlp.enable = true;
+
+  # Security settings.
+  security = {
+    # Enable hardware RNG by using TPM.
+    rngd.enable = true;
+
+    sudo = {
+      enable = true;
+      wheelNeedsPassword = true;
+    };
+  };
 
 
   # This value determines the NixOS release from which the default
