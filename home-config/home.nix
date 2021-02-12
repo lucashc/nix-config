@@ -13,6 +13,9 @@ let
     ipython
     jupyter
   ]);
+  unstable = import <unstable> {
+    config.allowUnfree = true;
+  };
 in
 {
   # Home-Manager setup
@@ -28,18 +31,16 @@ in
     # Python
     basicPythonEnv
     # Basic utilities
-    htop
     fortune
-    killall
     # Office
     libreoffice
-    zoom-us
-    teams
+    unstable.zoom-us
+    unstable.teams
     texstudio
     # Media players
     mpv
     vlc
-    spotify
+    unstable.spotify
     # Image manipulation
     imagemagick
     krita
@@ -63,6 +64,8 @@ in
     kcalc
   ]);
 
+  programs.firefox.enable = true;
+
   programs.texlive = {
     enable = true;
     extraPackages = tpkgs: {
@@ -80,6 +83,12 @@ in
     enable = true;
     userName = "Lucas Crijns";
     userEmail = "lucascrijns@gmail.com";
+  };
+  programs.gpg.enable = true;
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
   };
 
   # This value determines the Home Manager release that your
