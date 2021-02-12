@@ -33,7 +33,7 @@ in
     # Basic utilities
     fortune
     # Office
-    libreoffice
+    libreoffice-fresh
     unstable.zoom-us
     unstable.teams
     texstudio
@@ -48,20 +48,21 @@ in
     gimp-with-plugins
     ipe
     # Media
-    discord
-    signal-desktop
+    unstable.discord
+    unstable.signal-desktop
     # Gaming
     steam
   ])
-  # KDE Applications
-  ++ (with pkgs.kdeApplications; with pkgs; [
-    digikam
-    krita
-    okular
-    ark
-    filelight
-    kate
-    kcalc
+  # GNOME Applications
+  ++ (with pkgs.gnome3; with pkgs; [
+    eog # Image viewer
+    evince # PDF reader
+    gnome-tweak-tool
+
+    # Extensions
+    gnomeExtensions.appindicator
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.clipboard-indicator
   ]);
 
   programs.firefox.enable = true;

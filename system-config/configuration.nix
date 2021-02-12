@@ -70,16 +70,15 @@ in
   };
   console.keyMap = "us-acentos";
 
-  # Enable SDDM.
-  services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  # Fix Cursor theme.
-  services.xserver.displayManager.sddm.extraConfig = ''
-  [Theme]
-  CursorTheme=breeze_cursors
-  '';
-  # Enable the Plasma 5 Desktop Environment.
-  services.xserver.desktopManager.plasma5.enable = true;
+  # GNOME desktop.
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome3.enable = true;
+  };
+
+  services.dbus.packages = [ pkgs.gnome3.dconf ];
+  services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
   
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -108,10 +107,20 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
+  # Enable fish.
+  programs.fish.enable = true;
+
+  # Enable GNUPG.
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lucas = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.fish;
   };
   
   # Package options
@@ -160,6 +169,18 @@ in
     sudo = {
       enable = true;
       wheelNeedsPassword = true;
+    };
+  };
+
+  # Nix daemon config.
+  nix = {
+    # Automate optimisation.
+    autoOptimiseStore = true;
+    # Automate garbage collection.
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
     };
   };
 
