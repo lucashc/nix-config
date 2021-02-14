@@ -21,45 +21,72 @@ in
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.resumeDevice = "/dev/mapper/enc";
-  boot.kernelParams = [
-    "resume_offset=1840384" # Calculate on new install
-  ];
+  # Boot options.
+  boot = {
+    # Use the systemd-boot EFI boot loader.
+    loader = {
+      systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+    };
+    
+    resumeDevice = "/dev/mapper/enc";
+    kernelParams = [
+      "resume_offset=1840384" # Calculate on new install
+    ];
 
-  # Cleanup tmp at boot.
-  boot.cleanTmpDir = true;
+    # Cleanup tmp at boot.
+    cleanTmpDir = true;
 
-  # Enable all firmware.
-  hardware.enableAllFirmware = true;
-
-  # Enable bluetooth.
-  hardware.bluetooth = {
-    enable = true;
-    package = pkgs.bluezFull;
+    # Use latest unstable kernel.
+    kernelPackages = unstable.linuxPackages_latest;
   };
 
-  # Enable microcode updates.
-  hardware.cpu.intel.updateMicrocode = true;
+  # Hardware options.
+  hardware = {
+    # Enable all firmware.
+    enableAllFirmware = true;
 
-  # Enable Pulseaudio.
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull; 
+    # Enable bluetooth.
+    bluetooth = {
+      enable = true;
+      package = pkgs.bluezFull;
+    };
+
+    # Enable microcode updates.
+    cpu.intel.updateMicrocode = true;
+
+    # Enable Pulseaudio.
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull; 
+    };
+
+    # Enable nvidia drivers.
+    nvidia = {
+      prime = {
+        offload.enable = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
+      powerManagement.enable = true;
+    };
+
+    opengl = {
+      driSupport = true;
+      driSupport32Bit = true;
+    };
   };
-  
-  # Use latest unstable kernel.
-  boot.kernelPackages = unstable.linuxPackages_latest;
   
   # Set networking.
-  networking.hostName = "Horizon"; # Define your hostname.
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "Horizon";
+    networkmanager.enable = true;
+    firewall.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "Europe/Amsterdam";
+  };
+
   # Select internationalisation properties.
+  time.timeZone = "Europe/Amsterdam";
   i18n = {
     defaultLocale = "en_GB.UTF-8";
     supportedLocales = [ "en_GB.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
@@ -70,45 +97,44 @@ in
   };
   console.keyMap = "us-acentos";
 
-  # GNOME desktop.
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome3.enable = true;
-  };
+  # Services.
+  services = {
 
-  services.dbus.packages = [ pkgs.gnome3.dconf ];
-  services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
-  
-  # Configure keymap in X11
-  services.xserver.layout = "us";
-  services.xserver.xkbVariant = "intl";
+    # Enable GUI.
+    xserver = {
+      enable = true;
 
-  # Enable nvidia drivers.
-  # Use the latest versions.
-  services.xserver.videoDrivers = [ "nvidiaBeta" ];
-  hardware.nvidia = {
-    prime = {
-      offload.enable = true;
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
+      # Enable nvidia drivers.
+      videoDrivers = [ "nvidiaBeta" ];
+
+        # GNOME desktop.
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
+
+      # Configure keymap in X11
+      layout = "us";
+      xkbVariant = "intl";
+
+      # Enable libInput.
+      libinput.enable = true;
     };
-    powerManagement.enable = true;
+
+    # Enable GNOME settings management.
+    dbus.packages = [ pkgs.gnome3.dconf ];
+    udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
+
+    # Enable CUPS to print documents.
+    printing.enable = true;
+
+    # Battery management.
+    tlp.enable = true;
   };
 
-  hardware.opengl = {
-    driSupport = true;
-    driSupport32Bit = true;
+  # Programs.
+  programs = {
+    # Enable fish.
+    fish.enable = true;
   };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-
-  # Enable fish.
-  programs.fish.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lucas = {
@@ -149,12 +175,8 @@ in
     source-code-pro
   ];
 
-  # Enable the firewall by default.
-  networking.firewall.enable = true;
 
-  # Battery management.
-  services.tlp.enable = true;
-
+  # Enable Docker
   virtualisation.docker.enable = true;
 
   # Security settings.
