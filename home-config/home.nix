@@ -53,7 +53,7 @@ in
     # Gaming
     steam
     # Web browser
-    firefox
+    firefox-esr
   ])
   # GNOME Applications
   ++ (with pkgs.gnome3; with pkgs; [
