@@ -40,7 +40,7 @@ in
     # Media players
     mpv
     vlc
-    unstable.spotify
+    spotify
     # Image manipulation
     imagemagick
     krita
@@ -48,10 +48,12 @@ in
     gimp-with-plugins
     ipe
     # Media
-    unstable.discord
-    unstable.signal-desktop
+    discord
+    signal-desktop
     # Gaming
     steam
+    # Web browser
+    firefox
   ])
   # GNOME Applications
   ++ (with pkgs.gnome3; with pkgs; [
@@ -65,8 +67,6 @@ in
     gnomeExtensions.clipboard-indicator
   ]);
 
-  programs.firefox.enable = true;
-
   programs.texlive = {
     enable = true;
     extraPackages = tpkgs: {
@@ -76,8 +76,6 @@ in
 	      algorithms;
     };
   };
-
-
 
   programs.vscode.enable = true;
   programs.git = {
@@ -92,6 +90,9 @@ in
     enableSshSupport = true;
   };
 
+  services.syncthing = {
+    enable = true;
+  };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
