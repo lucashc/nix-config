@@ -19,7 +19,6 @@ let
 in
 {
   # Home-Manager setup
-  programs.home-manager.enable = true;
   home.username = "lucas";
   home.homeDirectory = "/home/lucas";
   
@@ -32,6 +31,7 @@ in
     basicPythonEnv
     # Basic utilities
     fortune
+    glxinfo
     # Office
     libreoffice-fresh
     unstable.zoom-us
@@ -67,32 +67,46 @@ in
     gnomeExtensions.clipboard-indicator
   ]);
 
-  programs.texlive = {
-    enable = true;
-    extraPackages = tpkgs: {
-      inherit (tpkgs)
-        scheme-medium
-	      collection-fontsrecommended
-	      algorithms;
+  # Programs and their config
+  programs = {
+    # Enable Home-Manager
+    home-manager.enable = true;
+    # Enable latex
+    texlive = {
+        enable = true;
+        extraPackages = tpkgs: {
+        inherit (tpkgs)
+            scheme-medium
+	        collection-fontsrecommended
+	        algorithms;
+        };
+    };
+
+    # Enable vscode
+    vscode.enable = true;
+
+    # Enable git
+    git = {
+        enable = true;
+        userName = "Lucas Crijns";
+        userEmail = "lucascrijns@gmail.com";
+    };
+    
+    # Enable gpg
+    gpg.enable = true;
+  };
+
+  # Services
+  services = {
+    gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+    };
+    syncthing = {
+      enable = true;
     };
   };
 
-  programs.vscode.enable = true;
-  programs.git = {
-    enable = true;
-    userName = "Lucas Crijns";
-    userEmail = "lucascrijns@gmail.com";
-  };
-  programs.gpg.enable = true;
-
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
-  };
-
-  services.syncthing = {
-    enable = true;
-  };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
