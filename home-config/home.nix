@@ -32,6 +32,11 @@ in
     # Basic utilities
     fortune
     glxinfo
+    pciutils
+    zip
+    xz
+    bzip2
+    powertop
     # Office
     libreoffice-fresh
     unstable.zoom-us
