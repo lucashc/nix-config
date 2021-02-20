@@ -81,9 +81,7 @@ in
         enable = true;
         extraPackages = tpkgs: {
         inherit (tpkgs)
-            scheme-medium
-	        collection-fontsrecommended
-	        algorithms;
+            scheme-full;
         };
     };
 
